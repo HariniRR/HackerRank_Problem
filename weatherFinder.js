@@ -26,16 +26,13 @@ function readLine() {
  */
 async function getTemperature(name) {
     return new Promise((resolve, reject) => {
-        const url = https://jsonmock.hackerrank.com/api/weather?name=${encodeURIComponent(name)};
+        const url = `https://jsonmock.hackerrank.com/api/weather?name=${encodeURIComponent(name)}`;
         console.log(Fetching data from URL: ${url});
-
         https.get(url, (res) => {
             let data = '';
-
             res.on('data', (chunk) => {
                 data += chunk;
             });
-
             res.on('end', () => {
                 try {
                     const jsonResponse = JSON.parse(data);
@@ -43,9 +40,7 @@ async function getTemperature(name) {
 
                     if (jsonResponse && jsonResponse.data && jsonResponse.data.length > 0) {
                         const weatherInfo = jsonResponse.data[0].weather;
-                        console.log(Weather info found: ${weatherInfo});
-
-                        // Improved regex to handle different formats
+                        console.log(Weather info found: ${weatherInfo})
                         const temperatureMatch = weatherInfo.match(/(-?\d+)/);
                         if (temperatureMatch) {
                             const temperature = parseInt(temperatureMatch[0], 10);
@@ -72,12 +67,8 @@ async function getTemperature(name) {
 }
 async function main() {
     const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
-
     const name = readLine();
-
     const result = await getTemperature(name);
-    
     ws.write(result.toString());
-
     ws.end();
 }
